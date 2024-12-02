@@ -63,21 +63,20 @@ export default function Home() {
         };
       });
       setEnhanceLogs(prev => [{
-        type: 'success',
+        type: 'success' as const,  // as const 추가
         ringType: selectedRing.type,
         enhancement: newEnhancement,
         timestamp: Date.now()
       }, ...prev].slice(0, 5));
     } else {
-      // 파괴
-      setSelectedRing(prev => {
-        if (!prev) return null;
-        return {
-          ...prev,
-          enhancement: 0,
-          stats: BASE_STATS[prev.type]
-        };
-      });
+
+      setEnhanceLogs(prev => [{
+        type: 'destroy' as const,  // as const 추가
+        ringType: selectedRing.type,
+        enhancement: selectedRing.enhancement,
+        timestamp: Date.now()
+    }, ...prev].slice(0, 5));
+    
       setUsedResources(prev => ({
         ...prev,
         rings: {
@@ -97,7 +96,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 p-4">
       <div className="max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold text-white mb-8 text-center">코창서버 반지 강화 시뮬레이터</h1>
+        <h1 className="text-3xl font-bold text-white mb-8 text-center">코창서버 반지 강화 시뮬레이터</h1>
 
         {!selectedRing ? (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -149,8 +148,8 @@ export default function Home() {
                     onClick={() => handleEnhance('normal')}
                     disabled={selectedRing.enhancement >= 6}
                     className={`${selectedRing.enhancement >= 6
-                        ? 'bg-gray-600 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-500'
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-500'
                       } text-white rounded-lg py-2 px-4 transition-colors duration-200`}
                   >
                     강화석
@@ -160,8 +159,8 @@ export default function Home() {
                     onClick={() => handleEnhance('advanced')}
                     disabled={selectedRing.enhancement >= 6}
                     className={`${selectedRing.enhancement >= 6
-                        ? 'bg-gray-600 cursor-not-allowed'
-                        : 'bg-green-600 hover:bg-green-500'
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-green-600 hover:bg-green-500'
                       } text-white rounded-lg py-2 px-4 transition-colors duration-200`}
                   >
                     상급 강화석
@@ -172,8 +171,8 @@ export default function Home() {
                     onClick={() => handleEnhance('premium')}
                     disabled={selectedRing.enhancement >= 6}
                     className={`${selectedRing.enhancement >= 6
-                        ? 'bg-gray-600 cursor-not-allowed'
-                        : 'bg-purple-600 hover:bg-purple-500'
+                      ? 'bg-gray-600 cursor-not-allowed'
+                      : 'bg-purple-600 hover:bg-purple-500'
                       } text-white rounded-lg py-2 px-4 transition-colors duration-200`}
                   >
                     고급 강화석
