@@ -63,20 +63,21 @@ export default function Home() {
         };
       });
       setEnhanceLogs(prev => [{
-        type: 'success' as const,  // as const 추가
+        type: 'success' as const,
         ringType: selectedRing.type,
         enhancement: newEnhancement,
         timestamp: Date.now()
       }, ...prev].slice(0, 5));
     } else {
-
-      setEnhanceLogs(prev => [{
-        type: 'destroy' as const,  // as const 추가
-        ringType: selectedRing.type,
-        enhancement: selectedRing.enhancement,
-        timestamp: Date.now()
-    }, ...prev].slice(0, 5));
-    
+      // 파괴
+      setSelectedRing(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          enhancement: 0,
+          stats: BASE_STATS[prev.type]
+        };
+      });
       setUsedResources(prev => ({
         ...prev,
         rings: {
@@ -85,7 +86,7 @@ export default function Home() {
         }
       }));
       setEnhanceLogs(prev => [{
-        type: 'destroy',
+        type: 'destroy' as const,
         ringType: selectedRing.type,
         enhancement: selectedRing.enhancement,
         timestamp: Date.now()
